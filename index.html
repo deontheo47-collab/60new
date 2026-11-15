@@ -8,35 +8,34 @@
     <style>
       :root {
         --bg: #071a2b;
-        --bg-2: #0c1d31;
-        --panel: #12263f;
-        --panel-soft: rgba(121, 148, 180, 0.12);
-        --topbar: #111111;
-        --topbar-text: #f2f6ff;
-        --blue: #7bbaf7;
-        --blue-strong: #5ea8ef;
-        --blue-soft: #9dcaf7;
-        --text: #ebf2ff;
-        --muted: #b6c9df;
-        --line: rgba(145, 174, 209, 0.22);
-        --orange: #ff7b54;
-        --chip: rgba(125, 152, 183, 0.14);
-        --chip-active: #7bbaf7;
-        --header-blue: #0d2951;
-        --header-blue-2: #0f2347;
-        --shadow: rgba(0, 0, 0, 0.24);
-        --danger: #ff4d68;
-        --nav-active: #7bbaf7;
+        --bg-deep: #091a2e;
+        --page: #071e32;
+        --panel: #132a42;
+        --panel-soft: rgba(128, 156, 188, 0.12);
+        --panel-strong: rgba(116, 141, 177, 0.18);
+        --line: rgba(152, 177, 210, 0.18);
+        --text: #eef5ff;
+        --muted: #bfd1eb;
+        --muted-2: #9bb1cf;
+        --blue: #7aaeff;
+        --blue-2: #9ec8ff;
+        --blue-dark: #0d2a55;
+        --blue-deep: #102d52;
+        --header: #0d2344;
+        --header-2: #102c51;
+        --shadow: rgba(0, 0, 0, 0.25);
+        --danger: #ff4d67;
+        --nav-bg: rgba(10, 29, 47, 0.97);
       }
 
       * { box-sizing: border-box; }
 
       html, body {
         margin: 0;
-        height: 100%;
-        background: var(--bg);
+        min-height: 100%;
+        background: #020b12;
         color: var(--text);
-        font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
       body {
@@ -44,214 +43,206 @@
         justify-content: center;
       }
 
-      .app-shell {
-        position: relative;
+      button, input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .phone {
         width: 100%;
-        min-height: 100vh;
         max-width: 760px;
+        min-height: 100vh;
         background: var(--bg);
-        color: var(--text);
+        position: relative;
+        padding-bottom: 96px;
       }
 
       .topbar {
-        height: 76px;
+        height: 82px;
+        background: #090d13;
         display: grid;
-        grid-template-columns: 52px 1fr 120px;
+        grid-template-columns: 68px 1fr 110px;
         align-items: center;
-        padding: 0 16px 0 18px;
-        background: #0d0d0f;
+        padding: 0 18px;
       }
 
-      .topbar .left,
-      .topbar .right {
+      .close,
+      .toolbar {
         display: flex;
         align-items: center;
       }
 
-      .topbar .right {
-        justify-content: flex-end;
-        gap: 14px;
-      }
-
-      .close-button,
-      .toolbar-icon {
-        appearance: none;
-        border: 0;
-        background: transparent;
-        color: var(--topbar-text);
-        cursor: pointer;
+      .close {
+        font-size: 40px;
+        line-height: 1;
+        color: white;
+        font-weight: 300;
         user-select: none;
       }
 
-      .close-button {
-        font-size: 42px;
-        line-height: 1;
-        font-weight: 300;
-        padding: 0 4px 0 0;
-      }
-
-      .brand-center {
+      .title {
         text-align: center;
         font-size: 22px;
         font-weight: 800;
         letter-spacing: -0.05em;
       }
 
-      .toolbar-icon {
-        font-size: 19px;
-        width: 26px;
-        height: 26px;
+      .toolbar {
+        justify-content: flex-end;
+        gap: 12px;
+        color: white;
+      }
+
+      .tool {
+        width: 22px;
+        height: 22px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-      }
-
-      .toolbar-icon.more {
-        font-size: 26px;
+        font-size: 20px;
         line-height: 1;
+        opacity: 0.95;
       }
 
-      .main-header {
-        background: linear-gradient(90deg, var(--header-blue) 0%, var(--header-blue-2) 100%);
-        padding: 20px 20px 18px;
+      .tool.more {
+        font-size: 28px;
+      }
+
+      .header-card {
+        background: linear-gradient(90deg, var(--header) 0%, var(--header-2) 100%);
+        padding: 18px 20px 22px;
       }
 
       .header-row {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 16px;
       }
 
-      .menu-badge {
-        width: 54px;
-        height: 54px;
+      .menu-pill {
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
-        background: #f4f7fb;
-        flex: 0 0 auto;
+        background: #f3f6fb;
         position: relative;
+        flex-shrink: 0;
       }
 
-      .menu-badge::before,
-      .menu-badge::after,
-      .menu-badge span {
+      .menu-pill::before,
+      .menu-pill::after,
+      .menu-pill span {
         content: "";
         position: absolute;
-        left: 15px;
-        right: 15px;
+        left: 14px;
+        right: 14px;
         height: 3px;
-        border-radius: 3px;
         background: #102647;
+        border-radius: 4px;
       }
 
-      .menu-badge::before { top: 18px; }
-      .menu-badge span { top: 25px; }
-      .menu-badge::after { top: 32px; }
+      .menu-pill::before { top: 18px; }
+      .menu-pill span { top: 25px; }
+      .menu-pill::after { top: 32px; }
 
-      .logo-wrap {
+      .brand {
+        flex: 1;
         display: flex;
         align-items: baseline;
         gap: 0;
-        margin-left: 12px;
+        min-width: 0;
       }
 
-      .big-60 {
+      .brand .num {
         font-size: 52px;
-        font-weight: 800;
+        line-height: 0.9;
         letter-spacing: -0.08em;
+        font-weight: 800;
+      }
+
+      .brand .word {
+        font-size: 52px;
+        line-height: 0.9;
+        letter-spacing: -0.08em;
+        font-weight: 800;
         color: #edf3ff;
-        line-height: 0.9;
-      }
-
-      .big-new {
-        font-size: 52px;
-        font-weight: 800;
-        letter-spacing: -0.08em;
-        color: #ebf2ff;
-        line-height: 0.9;
       }
 
       .alerts-pill {
-        margin-left: auto;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 134px;
-        height: 54px;
+        min-width: 130px;
+        height: 52px;
         border-radius: 999px;
-        background: #f4f7fb;
-        color: #102547;
+        background: #f3f6fb;
+        color: #0f2747;
+        border: 0;
         font-weight: 700;
         font-size: 18px;
-        padding: 0 22px;
-        border: 0;
-        cursor: pointer;
+        padding: 0 20px;
       }
 
       .tagline {
         margin: 18px 0 0;
-        color: #dfeafc;
         font-size: 22px;
+        color: #dfeafc;
         letter-spacing: -0.03em;
       }
 
       .screen {
         display: none;
-        padding: 12px 18px 110px;
+        padding: 16px 20px 18px;
       }
 
       .screen.active {
         display: block;
       }
 
-      .section-tabs {
+      .feed-tabs {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 12px;
-        margin: 10px 0 22px;
+        margin-bottom: 18px;
       }
 
-      .tab {
-        border: 1px solid var(--line);
-        background: rgba(135, 157, 185, 0.12);
-        color: var(--text);
+      .feed-tab {
         min-height: 52px;
+        border: 1px solid var(--line);
         border-radius: 999px;
+        background: rgba(136, 159, 188, 0.12);
+        color: var(--text);
         font-size: 15px;
         font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 10px;
+        padding: 0 12px;
       }
 
-      .tab.active {
+      .feed-tab.active {
         background: var(--blue);
         border-color: var(--blue);
-        color: #07213e;
+        color: #0b2040;
       }
 
-      .searchbox {
+      .search-box {
         width: 100%;
-        min-height: 62px;
+        min-height: 64px;
         border-radius: 16px;
         border: 1px solid var(--line);
-        background: rgba(124, 156, 190, 0.12);
+        background: rgba(131, 154, 182, 0.12);
         color: var(--text);
-        padding: 18px 20px;
         font-size: 18px;
+        padding: 18px 20px;
         outline: none;
       }
 
-      .searchbox::placeholder {
-        color: rgba(208, 220, 239, 0.76);
+      .search-box::placeholder {
+        color: rgba(214, 226, 244, 0.72);
       }
 
       .chip-row {
         display: flex;
         gap: 12px;
         overflow-x: auto;
-        padding: 20px 0 8px;
+        padding: 18px 0 10px;
         scrollbar-width: none;
       }
 
@@ -260,38 +251,31 @@
       }
 
       .chip {
-        border: 1px solid var(--line);
-        background: rgba(125, 152, 183, 0.12);
-        color: var(--text);
-        border-radius: 999px;
-        min-height: 42px;
-        padding: 9px 18px;
-        font-size: 16px;
-        font-weight: 600;
         white-space: nowrap;
-        cursor: pointer;
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(126, 150, 179, 0.12);
+        color: var(--text);
+        font-size: 15px;
+        font-weight: 600;
       }
 
       .chip.active {
         background: var(--blue);
         border-color: var(--blue);
-        color: #0c213e;
+        color: #0b2140;
       }
 
-      .news-block {
-        margin-top: 18px;
-      }
-
-      .sample-prelude {
-        background: rgba(92, 121, 164, 0.16);
-        border-left: 5px solid var(--blue-soft);
-        min-height: 84px;
+      .info-box {
+        background: rgba(90, 117, 157, 0.1);
+        border-left: 5px solid var(--blue-2);
         border-radius: 12px;
-        padding: 18px 16px 18px 20px;
+        padding: 16px 18px 16px 20px;
+        margin: 10px 0 16px;
         color: var(--text);
-        font-size: 18px;
-        line-height: 1.5;
-        margin-bottom: 12px;
+        font-size: 17px;
+        line-height: 1.45;
       }
 
       .story {
@@ -304,23 +288,22 @@
         justify-content: space-between;
         align-items: center;
         gap: 12px;
-        font-size: 16px;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .story-source {
         color: var(--muted);
       }
 
-      .source-tag {
-        color: var(--muted);
-      }
-
-      .source-tag strong {
+      .story-source strong {
         color: var(--text);
-        font-weight: 700;
       }
 
       .story h2 {
-        margin: 18px 0 16px;
-        font-size: clamp(26px, 3vw, 34px);
-        line-height: 1.1;
+        margin: 18px 0 12px;
+        font-size: clamp(28px, 3vw, 40px);
+        line-height: 1.08;
         letter-spacing: -0.04em;
       }
 
@@ -330,45 +313,84 @@
       }
 
       .story h2 a:hover {
-        color: var(--blue-soft);
+        color: var(--blue-2);
+      }
+
+      .story-summary {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 16px;
       }
 
       .story-stats {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 16px;
+        margin-top: 18px;
         color: var(--muted);
-        font-size: 16px;
+        font-size: 15px;
+      }
+
+      .save-btn {
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 14px;
+        min-height: 38px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(122, 146, 176, 0.08);
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .save-btn.saved {
+        background: var(--blue);
+        color: #0b2140;
+        border-color: var(--blue);
       }
 
       .empty-state {
-        border-left: 5px solid var(--blue-soft);
-        background: rgba(97, 124, 166, 0.12);
+        background: rgba(90, 118, 159, 0.12);
+        border-left: 5px solid var(--blue-2);
         border-radius: 12px;
-        padding: 18px 16px 18px 20px;
+        padding: 18px 18px 18px 20px;
         color: var(--muted);
-        margin-top: 22px;
+      }
+
+      .section-title {
+        margin: 18px 0 6px;
+        font-size: 26px;
+        letter-spacing: -0.04em;
+      }
+
+      .section-subtitle {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.45;
       }
 
       .live-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
-        margin: 18px 0 12px;
+        margin-top: 16px;
       }
 
       .video-card {
+        background: var(--panel-soft);
         border: 1px solid var(--line);
-        background: rgba(119, 148, 183, 0.11);
         border-radius: 16px;
         overflow: hidden;
       }
 
       .video-preview {
         position: relative;
-        height: 180px;
-        background: linear-gradient(135deg, rgba(72, 122, 185, 0.9), rgba(11, 20, 33, 1));
+        height: 178px;
+        background: linear-gradient(135deg, rgba(72, 118, 188, 0.9), rgba(11, 20, 33, 1));
       }
 
       .video-preview::before {
@@ -377,29 +399,29 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 54px;
-        height: 54px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.9);
-        color: #102647;
+        background: rgba(255,255,255,0.92);
+        color: #10264a;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
         padding-left: 4px;
+        font-size: 24px;
       }
 
       .live-badge {
         position: absolute;
-        left: 14px;
-        top: 14px;
+        left: 12px;
+        top: 12px;
         background: var(--danger);
-        color: white;
+        color: #fff;
         border-radius: 6px;
         padding: 5px 9px;
         font-size: 11px;
         font-weight: 800;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.08em;
       }
 
       .video-body {
@@ -407,50 +429,31 @@
       }
 
       .video-body h3 {
-        margin: 0 0 6px;
+        margin: 0 0 8px;
         font-size: 18px;
-        line-height: 1.2;
       }
 
       .video-body p {
-        margin: 0 0 14px;
+        margin: 0 0 12px;
         color: var(--muted);
       }
 
-      .watch-btn,
-      .primary-btn,
-      .follow-btn {
+      .watch-btn, .primary-btn {
+        width: 100%;
+        min-height: 42px;
         border: 0;
         border-radius: 11px;
         background: var(--blue);
-        color: #0a2041;
+        color: #0a2040;
         font-weight: 800;
-        cursor: pointer;
-      }
-
-      .watch-btn {
-        width: 100%;
-        min-height: 42px;
-      }
-
-      .section-title {
-        margin: 18px 0 4px;
-        font-size: 26px;
-        letter-spacing: -0.04em;
-      }
-
-      .section-subtitle {
-        color: var(--muted);
-        margin: 0 0 18px;
-        line-height: 1.45;
       }
 
       .clip-row {
         display: flex;
         gap: 12px;
         overflow-x: auto;
+        padding-bottom: 8px;
         scrollbar-width: none;
-        padding-bottom: 12px;
       }
 
       .clip-row::-webkit-scrollbar {
@@ -460,29 +463,29 @@
       .clip {
         flex: 0 0 170px;
         min-height: 168px;
-        border-radius: 15px;
-        background: linear-gradient(160deg, rgba(80,119,167,0.95), rgba(15,24,36,1));
         border: 1px solid var(--line);
+        border-radius: 15px;
+        background: linear-gradient(160deg, rgba(61,105,164,0.95), rgba(14,24,34,1));
         padding: 14px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
       }
 
-      .clip:nth-child(2) { background: linear-gradient(160deg, rgba(101,83,154,0.95), rgba(15,24,36,1)); }
-      .clip:nth-child(3) { background: linear-gradient(160deg, rgba(118,90,46,0.95), rgba(15,24,36,1)); }
+      .clip:nth-child(2) { background: linear-gradient(160deg, rgba(93,76,146,0.95), rgba(14,24,34,1)); }
+      .clip:nth-child(3) { background: linear-gradient(160deg, rgba(126,95,52,0.95), rgba(14,24,34,1)); }
+      .clip:nth-child(4) { background: linear-gradient(160deg, rgba(80,116,125,0.95), rgba(14,24,34,1)); }
       .clip strong {
         font-size: 16px;
-        line-height: 1.2;
       }
       .clip span {
-        color: rgba(236, 242, 255, 0.8);
         font-size: 12px;
+        color: rgba(245, 247, 255, 0.82);
         margin-top: 4px;
       }
 
       .chat-list {
-        margin-top: 16px;
+        margin-top: 10px;
       }
 
       .chat-item {
@@ -503,7 +506,7 @@
       }
 
       .signin-box {
-        background: rgba(92, 121, 164, 0.12);
+        background: rgba(92, 119, 164, 0.12);
         border: 1px solid var(--line);
         border-radius: 16px;
         padding: 18px 18px 20px;
@@ -516,33 +519,77 @@
       }
 
       .signin-box p {
-        margin: 0 0 18px;
+        margin: 0 0 16px;
         color: var(--muted);
         line-height: 1.5;
       }
 
-      .primary-btn {
-        min-height: 52px;
-        width: 100%;
+      .profile-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--blue);
+        color: #0c2242;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+
+      .profile-copy {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .profile-copy h3 {
+        margin: 0 0 4px;
         font-size: 18px;
       }
 
-      .me-box {
-        margin-top: 10px;
+      .profile-copy p {
+        margin: 0;
+        line-height: 1.5;
+        color: var(--muted);
       }
 
-      .profile-panel {
+      .follow-btn {
+        background: rgba(125, 150, 180, 0.08);
+        border: 1px solid var(--line);
+        color: var(--text);
+        border-radius: 10px;
+        min-height: 42px;
+        min-width: 110px;
+        font-weight: 700;
+      }
+
+      .follow-btn.following {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #0c2142;
+      }
+
+      .settings-box {
         background: rgba(122, 146, 176, 0.12);
         border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 18px 14px 14px;
+        border-radius: 16px;
+        margin-top: 18px;
+        padding: 18px 14px 18px;
       }
 
       .settings-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 14px;
+        margin-bottom: 18px;
       }
 
       .settings-head h3 {
@@ -552,17 +599,18 @@
 
       .settings-head span {
         color: var(--muted);
-        font-size: 20px;
+        font-size: 18px;
       }
 
       .setting-group {
         border-top: 1px solid var(--line);
-        padding-top: 18px;
-        margin-top: 18px;
+        padding-top: 16px;
+        margin-top: 16px;
       }
 
-      .setting-group:first-of-type {
+      .setting-group:first-child {
         border-top: 0;
+        margin-top: 0;
         padding-top: 0;
       }
 
@@ -579,31 +627,29 @@
 
       .seg-btn {
         border: 1px solid var(--line);
+        border-radius: 999px;
         background: transparent;
         color: var(--text);
-        border-radius: 999px;
         min-height: 38px;
-        padding: 8px 16px;
+        padding: 8px 14px;
         font-weight: 600;
-        cursor: pointer;
       }
 
       .seg-btn.selected {
         background: var(--blue);
         border-color: var(--blue);
-        color: #0a2041;
+        color: #0d2444;
       }
 
       .profile-link {
         width: 100%;
         min-height: 46px;
+        border-radius: 12px;
         border: 1px solid var(--line);
         background: rgba(125, 156, 188, 0.08);
         color: var(--text);
-        border-radius: 12px;
         margin-top: 12px;
         font-weight: 700;
-        cursor: pointer;
       }
 
       .bottom-nav {
@@ -612,12 +658,12 @@
         bottom: 0;
         transform: translateX(-50%);
         width: min(760px, 100%);
-        height: 92px;
-        background: rgba(10, 29, 47, 0.96);
+        height: 90px;
+        background: var(--nav-bg);
         border-top: 1px solid var(--line);
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        z-index: 20;
+        z-index: 10;
       }
 
       .nav-item {
@@ -625,11 +671,10 @@
         border: 0;
         background: transparent;
         color: var(--muted);
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
-        cursor: pointer;
-        position: relative;
         padding-top: 16px;
+        position: relative;
       }
 
       .nav-item.active {
@@ -639,29 +684,29 @@
       .nav-item.active::before {
         content: "";
         position: absolute;
-        left: 15%;
-        right: 15%;
+        left: 16%;
+        right: 16%;
         top: 0;
         height: 4px;
         border-radius: 999px;
-        background: var(--blue);
+        background: var(--nav-active);
       }
 
       .toast {
         position: fixed;
         left: 50%;
-        bottom: 112px;
+        bottom: 110px;
         transform: translateX(-50%);
-        background: #edf3ff;
-        color: #102647;
+        background: #edf4ff;
+        color: #102648;
         border-radius: 12px;
+        box-shadow: 0 10px 28px rgba(0,0,0,0.28);
         padding: 12px 16px;
-        font-weight: 600;
-        box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+        font-weight: 700;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.2s ease;
-        z-index: 30;
+        z-index: 25;
       }
 
       .toast.show {
@@ -669,77 +714,55 @@
       }
 
       @media (max-width: 560px) {
-        .topbar {
-          grid-template-columns: 44px 1fr 100px;
-          padding: 0 12px 0 16px;
-        }
-
-        .brand-center {
-          font-size: 20px;
-        }
-
-        .main-header {
-          padding: 18px 16px 18px;
-        }
-
-        .section-tabs {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .live-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .screen {
-          padding-left: 12px;
-          padding-right: 12px;
-        }
+        .topbar { grid-template-columns: 52px 1fr 98px; }
+        .feed-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .live-grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
-    <div class="app-shell">
+    <div class="phone">
       <header class="topbar">
-        <div class="left"><button class="close-button" aria-label="Close">×</button></div>
-        <div class="brand-center">60new</div>
-        <div class="right">
-          <button class="toolbar-icon" aria-label="Search">⌕</button>
-          <button class="toolbar-icon" aria-label="Notifications">⇪</button>
-          <button class="toolbar-icon more" aria-label="More">⋮</button>
+        <div class="close">×</div>
+        <div class="title">60new</div>
+        <div class="toolbar">
+          <span class="tool">⌕</span>
+          <span class="tool">⇪</span>
+          <span class="tool more">⋮</span>
         </div>
       </header>
 
-      <header class="main-header">
+      <header class="header-card">
         <div class="header-row">
-          <div class="menu-badge"><span></span></div>
-          <div class="logo-wrap" aria-label="60new logo">
-            <span class="big-60">60</span>
-            <span class="big-new">new</span>
+          <div class="menu-pill"><span></span></div>
+          <div class="brand" aria-label="60new logo">
+            <span class="num">60</span>
+            <span class="word">new</span>
           </div>
-          <button class="alerts-pill" type="button">Alerts <span style="margin-left:6px">3</span></button>
+          <button class="alerts-pill" type="button">Alerts</button>
         </div>
         <p class="tagline">Botswana news, all in one place.</p>
       </header>
 
       <main>
         <section class="screen active" id="homeScreen">
-          <div class="section-tabs" role="tablist" aria-label="News filters">
-            <button class="tab active" type="button">Top headlines</button>
-            <button class="tab" type="button">Most viewed</button>
-            <button class="tab" type="button">Following</button>
-            <button class="tab" type="button">Saved</button>
+          <div class="feed-tabs" role="tablist" aria-label="News tabs">
+            <button class="feed-tab active" type="button">Top headlines</button>
+            <button class="feed-tab" type="button">Most viewed</button>
+            <button class="feed-tab" type="button">Following</button>
+            <button class="feed-tab" type="button">Saved</button>
           </div>
 
-          <input id="homeSearch" class="searchbox" type="search" placeholder="Search stories, topics and accounts" aria-label="Search stories" />
+          <input id="homeSearch" class="search-box" type="search" placeholder="Search stories, topics and accounts" />
 
-          <div id="homeCategories" class="chip-row" aria-label="Categories"></div>
+          <div id="homeCats" class="chip-row"></div>
 
-          <div class="news-block" id="newsList"></div>
+          <div id="newsList"></div>
         </section>
 
         <section class="screen" id="liveScreen">
           <h2 class="section-title">Live now</h2>
-          <p class="section-subtitle">Watch live updates, events, and quick coverage from around Botswana.</p>
+          <p class="section-subtitle">Watch live updates and highlights from Botswana.</p>
 
           <div class="live-grid">
             <article class="video-card">
@@ -772,16 +795,15 @@
 
         <section class="screen" id="exploreScreen">
           <h2 class="section-title">Explore</h2>
-          <p class="section-subtitle">Find schools, universities, companies, institutions, and local communities.</p>
+          <p class="section-subtitle">Find schools, universities, companies and community accounts to follow.</p>
 
-          <input id="exploreSearch" class="searchbox" type="search" placeholder="Search accounts and topics" aria-label="Explore search" />
-
-          <div id="exploreCategories" class="chip-row" aria-label="Explore categories"></div>
-          <div id="profileList" style="margin-top:18px;"></div>
+          <input id="exploreSearch" class="search-box" type="search" placeholder="Search accounts and topics" />
+          <div id="exploreCats" class="chip-row"></div>
+          <div id="profileList" style="margin-top: 16px;"></div>
         </section>
 
         <section class="screen" id="chatScreen">
-          <div class="sample-prelude" style="margin-top: 10px;">Preview with sample chats. Real chat needs sign-in so people can be identified and blocked.</div>
+          <div class="info-box">Preview with sample chats. Real chat needs sign-in so people can be identified and blocked.</div>
 
           <div class="chat-list">
             <article class="chat-item">
@@ -806,7 +828,7 @@
         </section>
 
         <section class="screen" id="meScreen">
-          <div class="signin-box me-box">
+          <div class="signin-box">
             <h2>Join 60new</h2>
             <p>Sign in to comment, follow accounts and chat.</p>
             <div style="display:grid; gap:10px;">
@@ -817,7 +839,7 @@
             <p style="margin-top:16px; color: var(--muted);">Preview only. No account is created.</p>
           </div>
 
-          <div class="profile-panel">
+          <div class="settings-box">
             <div class="settings-head">
               <h3>Settings and privacy</h3>
               <span>▴</span>
@@ -825,7 +847,7 @@
 
             <div class="setting-group">
               <h4>Color mode</h4>
-              <div class="segmented" id="colorMode">
+              <div class="segmented">
                 <button class="seg-btn selected" type="button">Dark</button>
                 <button class="seg-btn" type="button">Light</button>
                 <button class="seg-btn" type="button">System</button>
@@ -834,7 +856,7 @@
 
             <div class="setting-group">
               <h4>Font style</h4>
-              <div class="segmented" id="fontMode">
+              <div class="segmented">
                 <button class="seg-btn selected" type="button">Default</button>
                 <button class="seg-btn" type="button">Serif</button>
                 <button class="seg-btn" type="button">Large</button>
@@ -854,7 +876,7 @@
         </section>
       </main>
 
-      <nav class="bottom-nav" aria-label="Main navigation">
+      <nav class="bottom-nav" aria-label="Nav">
         <button class="nav-item active" type="button" data-screen="home">Home</button>
         <button class="nav-item" type="button" data-screen="live">Live</button>
         <button class="nav-item" type="button" data-screen="explore">Explore</button>
@@ -873,11 +895,22 @@
         feed: 'Top headlines',
         query: '',
         news: [],
-        savedLinks: new Set(),
+        saved: new Set(),
         followed: new Set(['Police service'])
       };
 
-      const screenMap = {
+      const categories = ['All', 'Good news', 'Bad news', 'Politics', 'Business', 'Sport', 'Education'];
+      const exploreCats = ['All', 'Schools', 'Universities', 'Companies', 'News', 'Community'];
+      const profileData = [
+        { name: 'Sample secondary school', type: 'Schools', description: 'School updates, events and announcements.' },
+        { name: 'Sample university', type: 'Universities', description: 'Campus news, research and student updates.' },
+        { name: 'Sample Botswana company', type: 'Companies', description: 'Company news, opportunities and updates.' },
+        { name: 'Police service', type: 'Community', description: 'Official account · public safety updates.' },
+        { name: 'Botswana Guardian', type: 'News', description: 'News and headlines from Botswana.' }
+      ];
+
+      const toast = document.getElementById('toast');
+      const screens = {
         home: document.getElementById('homeScreen'),
         live: document.getElementById('liveScreen'),
         explore: document.getElementById('exploreScreen'),
@@ -885,63 +918,51 @@
         me: document.getElementById('meScreen')
       };
 
-      const toast = document.getElementById('toast');
-      const homeCategories = ['All', 'Good news', 'Bad news', 'Politics', 'Business', 'Sport', 'Education'];
-      const exploreCategories = ['All', 'Schools', 'Universities', 'Companies', 'News', 'Community'];
-      const profileData = [
-        { name: 'Sample secondary school', type: 'Schools', description: 'School updates, events and announcements.' },
-        { name: 'Sample university', type: 'Universities', description: 'Campus news, research and student updates.' },
-        { name: 'Sample Botswana company', type: 'Companies', description: 'Market updates, hiring and community action.' },
-        { name: 'Police service', type: 'Community', description: 'Official account · public safety updates.' },
-        { name: 'Botswana Guardian', type: 'News', description: 'News and headlines from Botswana.' }
-      ];
-
       function showToast(message) {
         toast.textContent = message;
         toast.classList.add('show');
-        clearTimeout(showToast._timer);
-        showToast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove('show'), 2000);
       }
 
       function setScreen(name) {
         state.currentScreen = name;
-        Object.entries(screenMap).forEach(([key, el]) => {
-          el.classList.toggle('active', key === name);
-        });
-        document.querySelectorAll('.nav-item').forEach(button => {
-          button.classList.toggle('active', button.dataset.screen === name);
-        });
+        Object.entries(screens).forEach(([key, el]) => el.classList.toggle('active', key === name));
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.screen === name));
       }
 
-      function renderTabs(container, values, selected, onSelect) {
+      function renderCategoryChips() {
+        const container = document.getElementById('homeCats');
         container.innerHTML = '';
-        values.forEach(value => {
+        categories.forEach(label => {
           const btn = document.createElement('button');
           btn.type = 'button';
-          btn.className = 'chip' + (value === selected ? ' active' : '');
-          btn.textContent = value;
-          btn.addEventListener('click', () => onSelect(value));
+          btn.className = 'chip' + (label === state.category ? ' active' : '');
+          btn.textContent = label;
+          btn.addEventListener('click', () => {
+            state.category = label;
+            renderCategoryChips();
+            renderNews();
+          });
           container.appendChild(btn);
         });
       }
 
-      function renderHomeTabs() {
-        document.querySelectorAll('.tab').forEach(button => {
-          button.classList.toggle('active', button.textContent.trim() === state.feed);
+      function renderExploreChips() {
+        const container = document.getElementById('exploreCats');
+        container.innerHTML = '';
+        exploreCats.forEach(label => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chip' + (label === state.exploreCategory ? ' active' : '');
+          btn.textContent = label;
+          btn.addEventListener('click', () => {
+            state.exploreCategory = label;
+            renderExploreChips();
+            renderExplore();
+          });
+          container.appendChild(btn);
         });
-      }
-
-      function timeAgo(dateString) {
-        if (!dateString) return 'Recently';
-        const date = new Date(dateString);
-        if (Number.isNaN(date.getTime())) return 'Recently';
-        const diffMs = Date.now() - date.getTime();
-        const mins = Math.max(1, Math.round(diffMs / 60000));
-        if (mins < 60) return mins + ' minutes ago';
-        const hours = Math.round(mins / 60);
-        if (hours < 24) return hours + ' hours ago';
-        const days = Math.round(hours / 24);
-        return days + ' days ago';
       }
 
       function escapeHtml(str) {
@@ -954,119 +975,121 @@
         }[ch]));
       }
 
+      function timeAgo(value) {
+        if (!value) return 'Recently';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Recently';
+        const diffMin = Math.max(1, Math.round((Date.now() - date.getTime()) / 60000));
+        if (diffMin < 60) return diffMin + ' minutes ago';
+        const hours = Math.round(diffMin / 60);
+        if (hours < 24) return hours + ' hours ago';
+        return Math.round(hours / 24) + ' days ago';
+      }
+
       function renderNews() {
-        const list = document.getElementById('newsList');
+        const container = document.getElementById('newsList');
         let items = [...state.news];
 
         if (state.feed === 'Saved') {
-          items = items.filter(item => state.savedLinks.has(item.link || item.title));
+          items = items.filter(item => state.saved.has(item.link || item.title));
         }
 
         if (state.category !== 'All') {
           items = items.filter(item => (item.topic || 'Other') === state.category);
         }
 
-        const query = state.query.trim().toLowerCase();
-        if (query) {
+        const q = state.query.trim().toLowerCase();
+        if (q) {
           items = items.filter(item => {
-            const text = [item.title, item.summary, item.source, item.topic].join(' ').toLowerCase();
-            return text.includes(query);
+            const haystack = [item.title, item.summary, item.source, item.topic].join(' ').toLowerCase();
+            return haystack.includes(q);
           });
         }
 
         if (!items.length) {
-          list.innerHTML = '<div class="empty-state">Nothing found. Try another word or topic.</div>';
+          container.innerHTML = '<div class="empty-state">Nothing found. Try another word or topic.</div>';
           return;
         }
 
-        list.innerHTML = items.map((item, index) => {
+        container.innerHTML = items.map((item, index) => {
           const source = escapeHtml(item.source || 'News');
           const title = escapeHtml(item.title || 'Untitled headline');
-          const summary = item.summary ? '<p style="margin:0; color: var(--muted); line-height: 1.6;">' + escapeHtml(item.summary) + '</p>' : '';
+          const summary = item.summary ? '<p class="story-summary">' + escapeHtml(item.summary) + '</p>' : '';
           const topic = escapeHtml(item.topic || 'Other');
           const published = escapeHtml(timeAgo(item.published));
           const views = escapeHtml(item.views || `${(9.8 - index * 0.7).toFixed(1)}k`);
           const comments = escapeHtml(item.comments || '1');
-          const key = escapeHtml(item.link || item.title || String(index));
-          const saved = state.savedLinks.has(item.link || item.title) ? 'Saved' : 'Save';
+          const key = item.link || item.title || String(index);
+          const isSaved = state.saved.has(key);
 
           return `
             <article class="story">
               <div class="story-meta">
-                <div class="source-tag"><strong>${source}</strong>, ${topic}</div>
+                <div class="story-source"><strong>${source}</strong>, ${topic}</div>
                 <div>${published}</div>
               </div>
-              <h2><a href="${escapeHtml(item.link || '#')}" target="_blank" rel="noreferrer noopener">${title}</a></h2>
+              <h2><a href="${escapeHtml(item.link || '#')}" target="_blank" rel="noopener noreferrer">${title}</a></h2>
               ${summary}
-              <div class="story-stats" style="margin-top: 14px;">
+              <div class="story-stats">
                 <span>${views} views</span>
                 <span>${comments} comments</span>
               </div>
-              <div style="margin-top: 12px; display:flex; justify-content:flex-end;">
-                <button type="button" class="seg-btn ${state.savedLinks.has(item.link || item.title) ? 'selected' : ''}" data-save="${key}">${saved}</button>
+              <div style="display:flex; justify-content:flex-end; margin-top: 10px;">
+                <button type="button" class="save-btn ${isSaved ? 'saved' : ''}" data-save="${escapeHtml(key)}">${isSaved ? 'Saved' : 'Save'}</button>
               </div>
             </article>
           `;
         }).join('');
 
-        list.querySelectorAll('[data-save]').forEach(button => {
-          button.addEventListener('click', () => {
-            const target = button.dataset.save;
-            const match = state.news.find(item => (item.link || item.title) === target);
+        container.querySelectorAll('[data-save]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const key = btn.dataset.save;
+            const match = state.news.find(item => (item.link || item.title) === key);
             if (!match) return;
-            const key = match.link || match.title;
-            if (state.savedLinks.has(key)) {
-              state.savedLinks.delete(key);
-            } else {
-              state.savedLinks.add(key);
-            }
+            const realKey = match.link || match.title;
+            if (state.saved.has(realKey)) state.saved.delete(realKey); else state.saved.add(realKey);
             renderNews();
           });
         });
       }
 
       function renderExplore() {
-        const profileList = document.getElementById('profileList');
         const query = document.getElementById('exploreSearch').value.trim().toLowerCase();
+        const container = document.getElementById('profileList');
         const filtered = profileData.filter(profile => {
-          const categoryMatch = state.exploreCategory === 'All' || profile.type === state.exploreCategory;
+          const typeMatch = state.exploreCategory === 'All' || profile.type === state.exploreCategory;
           const text = `${profile.name} ${profile.type} ${profile.description}`.toLowerCase();
-          const queryMatch = !query || text.includes(query);
-          return categoryMatch && queryMatch;
+          return typeMatch && (!query || text.includes(query));
         });
 
         if (!filtered.length) {
-          profileList.innerHTML = '<div class="empty-state">No accounts found. Try another search or category.</div>';
+          container.innerHTML = '<div class="empty-state">No accounts found. Try another search or category.</div>';
           return;
         }
 
-        profileList.innerHTML = filtered.map(profile => {
+        container.innerHTML = filtered.map(profile => {
+          const isFollowing = state.followed.has(profile.name);
+          const initial = escapeHtml(profile.name.charAt(0));
           const name = escapeHtml(profile.name);
           const type = escapeHtml(profile.type);
           const description = escapeHtml(profile.description);
-          const isFollowing = state.followed.has(profile.name);
 
           return `
-            <article class="chat-item" style="display:flex; align-items:flex-start; gap:14px;">
-              <div style="width:52px; height:52px; border-radius:50%; background: var(--blue); color: #0d2348; display:flex; align-items:center; justify-content:center; font-weight:800; flex:0 0 auto;">${name.charAt(0)}</div>
-              <div style="flex:1; min-width:0;">
-                <h3 style="margin-bottom:5px;">${name}</h3>
-                <p style="margin-bottom:6px; color: var(--muted);">${type}</p>
-                <p>${description}</p>
+            <article class="profile-card">
+              <div class="avatar">${initial}</div>
+              <div class="profile-copy">
+                <h3>${name}</h3>
+                <p>${type} · ${description}</p>
               </div>
-              <button type="button" class="seg-btn ${isFollowing ? 'selected' : ''}" data-follow="${escapeHtml(profile.name)}">${isFollowing ? 'Following' : 'Follow'}</button>
+              <button class="follow-btn ${isFollowing ? 'following' : ''}" type="button" data-follow="${escapeHtml(profile.name)}">${isFollowing ? 'Following' : 'Follow'}</button>
             </article>
           `;
         }).join('');
 
-        profileList.querySelectorAll('[data-follow]').forEach(button => {
-          button.addEventListener('click', () => {
-            const name = button.dataset.follow;
-            if (state.followed.has(name)) {
-              state.followed.delete(name);
-            } else {
-              state.followed.add(name);
-            }
+        container.querySelectorAll('[data-follow]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const key = btn.dataset.follow;
+            if (state.followed.has(key)) state.followed.delete(key); else state.followed.add(key);
             renderExplore();
           });
         });
@@ -1075,25 +1098,24 @@
       async function loadNews() {
         try {
           const response = await fetch('./news.json', { cache: 'no-store' });
-          if (!response.ok) throw new Error('news.json not found');
+          if (!response.ok) throw new Error('missing news.json');
           const data = await response.json();
-          const items = Array.isArray(data.items) ? data.items : (Array.isArray(data) ? data : []);
+          const items = Array.isArray(data.items) ? data.items : [];
           state.news = items.map(item => ({
             ...item,
             topic: item.topic || 'Other',
-            views: item.views || (Math.random() * 5000 + 800).toFixed(1) + 'k',
+            views: item.views || `${(Math.random() * 10 + 2).toFixed(1)}k`,
             comments: item.comments || '1'
           }));
           renderNews();
         } catch (error) {
-          const fallback = [
-            { source: 'Sunday Standard', title: 'Sample headline about business', topic: 'Business', published: new Date(Date.now() - 5*3600*1000).toISOString(), summary: 'Preview with sample headlines. Real stories load from the newspapers\' feeds once the collector is built.', link: '#', views: '3.1k', comments: '1' },
-            { source: 'Botswana Guardian', title: 'Sample headline about sport', topic: 'Sport', published: new Date(Date.now() - 18*3600*1000).toISOString(), summary: 'Preview with sample sports news. Real stories will appear once the collector is live.', link: '#', views: '9.7k', comments: '1' },
-            { source: 'The Voice', title: 'Sample headline about education', topic: 'Education', published: new Date(Date.now() - 2*86400000).toISOString(), summary: 'Sample education headline that will be replaced by live data after collection.', link: '#', views: '2.3k', comments: '1' }
+          state.news = [
+            { source: 'Sunday Standard', title: 'Sample headline about business', topic: 'Business', published: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), summary: 'Preview with sample headlines. Real stories load from the newspapers\' feeds once the collector is built.', link: '#', views: '3.1k', comments: '1' },
+            { source: 'Botswana Guardian', title: 'Sample headline about sport', topic: 'Sport', published: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(), summary: 'Preview with sample stories from our coverage feed.', link: '#', views: '9.7k', comments: '1' },
+            { source: 'The Voice', title: 'Sample headline about education', topic: 'Education', published: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), summary: 'Sample education headline that will be replaced when live feed data is available.', link: '#', views: '2.3k', comments: '1' }
           ];
-          state.news = fallback;
           renderNews();
-          showToast('news.json not found; showing sample headlines.');
+          showToast('news.json not found; using sample content.');
         }
       }
 
@@ -1102,60 +1124,41 @@
           button.addEventListener('click', () => setScreen(button.dataset.screen));
         });
 
-        document.querySelectorAll('.tab').forEach(button => {
+        document.querySelectorAll('.feed-tab').forEach(button => {
           button.addEventListener('click', () => {
             state.feed = button.textContent.trim();
-            renderHomeTabs();
+            document.querySelectorAll('.feed-tab').forEach(tab => tab.classList.toggle('active', tab === button));
             renderNews();
           });
         });
 
-        renderTabs(document.getElementById('homeCategories'), homeCategories, state.category, value => {
-          state.category = value;
-          renderTabs(document.getElementById('homeCategories'), homeCategories, state.category, (next) => {
-            state.category = next;
-            renderNews();
-          });
-          renderNews();
-        });
-
-        renderTabs(document.getElementById('exploreCategories'), exploreCategories, state.exploreCategory, value => {
-          state.exploreCategory = value;
-          renderTabs(document.getElementById('exploreCategories'), exploreCategories, state.exploreCategory, (next) => {
-            state.exploreCategory = next;
-            renderExplore();
-          });
-          renderExplore();
-        });
-
-        document.getElementById('homeSearch').addEventListener('input', (event) => {
-          state.query = event.target.value;
+        document.getElementById('homeSearch').addEventListener('input', (e) => {
+          state.query = e.target.value;
           renderNews();
         });
 
         document.getElementById('exploreSearch').addEventListener('input', renderExplore);
 
-        document.querySelectorAll('.seg-btn').forEach(button => {
-          button.addEventListener('click', () => {
-            const group = button.parentElement;
-            group.querySelectorAll('.seg-btn').forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
+        document.querySelectorAll('.watch-btn, .primary-btn').forEach(btn => {
+          btn.addEventListener('click', () => showToast('Preview mode only. Connect your real backend to enable actions.'));
+        });
+
+        document.querySelectorAll('.seg-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const group = btn.parentElement;
+            group.querySelectorAll('.seg-btn').forEach(item => item.classList.remove('selected'));
+            btn.classList.add('selected');
           });
         });
 
-        document.querySelectorAll('.primary-btn, .watch-btn').forEach(button => {
-          button.addEventListener('click', () => showToast('Preview mode only. Connect your backend to enable live actions.'));
-        });
-
-        document.querySelector('.alerts-pill').addEventListener('click', () => {
-          showToast('Alerts panel is preview-only.');
-        });
+        document.querySelector('.alerts-pill').addEventListener('click', () => showToast('Alerts preview is enabled.'));
       }
 
+      renderCategoryChips();
+      renderExploreChips();
       bindEvents();
-      renderHomeTabs();
-      renderExplore();
       loadNews();
+      renderExplore();
     </script>
   </body>
 </html>
