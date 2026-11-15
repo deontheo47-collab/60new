@@ -1,9 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Headlines</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The latest headlines from Botswana news sources.">
+  <title>My Headlines</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f4f6fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      margin-bottom: 0.4rem;
+    }
+
+    #status {
+      color: #596579;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 1rem;
+    }
+
+    .story {
+      padding: 1.25rem;
+      background: #fff;
+      border: 1px solid #e1e6ef;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgb(23 32 51 / 5%);
+    }
+
+    .story-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: #596579;
+      font-size: 0.875rem;
+    }
+
+    .topic {
+      padding: 0.15rem 0.55rem;
+      background: #edf2ff;
+      border-radius: 999px;
+      color: #29499b;
+    }
+
+    .story h2 {
+      margin: 0 0 0.65rem;
+      font-size: 1.15rem;
+      line-height: 1.4;
+    }
+
+    .story h2 a {
+      color: #173b8f;
+      text-decoration: none;
+    }
+
+    .story h2 a:hover {
+      text-decoration: underline;
+    }
+
+    .story p {
+      margin: 0;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-    <h1>Headlines will appear here soon!</h1>
+  <header>
+    <h1>My Headlines</h1>
+    <p id="status" role="status" aria-live="polite">Loading headlines…</p>
+  </header>
+
+  <main>
+    <div id="news" class="news-grid"></div>
+  </main>
+
+  <script>
+    const status = document.getElementById("status");
+    const newsContainer = document.getElementById("news");
+
+    function formatDate(value) {
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      return new Intl.DateTimeFormat(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(date);
+    }
+
+    function makeStory(item) {
+      const article = document.createElement("article");
+      article.className = "story";
+
+      const meta = document.createElement("div");
+      meta.className = "story-meta";
+
+      const source = document.createElement("span");
+      source.textContent = item.source || "News";
+      meta.append(source);
+
+      const dateText = formatDate(item.published);
+      if (dateText) {
+        const date = document.createElement("time");
+        date.dateTime = item.published;
+        date.textContent = dateText;
+        meta.append(date);
+      }
+
+      if (item.topic) {
+        const topic = document.createElement("span");
+        topic.className = "topic";
+        topic.textContent = item.topic;
+        meta.append(topic);
+      }
+
+      const heading = document.createElement("h2");
+      const link = document.createElement("a");
+      link.href = item.link;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = item.title || "Untitled headline";
+      heading.append(link);
+
+      article.append(meta, heading);
+
+      if (item.summary) {
+        const summary = document.createElement("p");
+        summary.textContent = item.summary;
+        article.append(summary);
+      }
+
+      return article;
+    }
+
+    async function loadNews() {
+      try {
+        const response = await fetch("./news.json", { cache: "no-store" });
+
+        if (!response.ok) {
+          throw new Error(`Could not load news.json (${response.status})`);
+        }
+
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+
+        if (items.length === 0) {
+          status.textContent = "No headlines are available right now.";
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        items.forEach(item => fragment.append(makeStory(item)));
+        newsContainer.append(fragment);
+
+        const updated = formatDate(data.updated);
+        status.textContent = updated
+          ? `Latest headlines · Updated ${updated}`
+          : "Latest headlines";
+      } catch (error) {
+        console.error("Unable to load headlines:", error);
+        status.textContent =
+          "Headlines could not be loaded. Please try again later.";
+      }
+    }
+
+    loadNews();
+  </script>
 </body>
-</html>
+    </html>
