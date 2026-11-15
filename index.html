@@ -1,378 +1,1161 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1425">
-  <meta name="description" content="Botswana news, all in one place.">
-  <title>60new — Botswana news</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --page: #0b1425;
-      --header: #0c214f;
-      --surface: #12223d;
-      --surface-2: #152945;
-      --line: #243855;
-      --text: #e6eefb;
-      --muted: #a7b9d5;
-      --blue: #70a8ff;
-      --blue-light: #9dcaff;
-      --ink: #10203a;
-      --danger: #ff5264;
-      --nav-height: 76px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--page);
-      color: var(--text);
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; background: var(--page); }
-    body { min-height: 100vh; padding-bottom: var(--nav-height); }
-    button, input { font: inherit; }
-    button { color: inherit; }
-    button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--blue-light); outline-offset: 3px; }
-    .topbar { height: 118px; background: #151515; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 18px max(24px, calc((100vw - 760px)/2)); border-radius: 0 0 24px 24px; }
-    .topbar .left, .topbar .right { display: flex; align-items: center; gap: 20px; }
-    .topbar .right { justify-content: flex-end; }
-    .icon-button { border: 0; padding: 6px; background: transparent; cursor: pointer; color: #f2f2f2; font-size: 26px; line-height: 1; min-width: 34px; min-height: 38px; }
-    .topbrand { font-size: 23px; font-weight: 750; letter-spacing: -.05em; }
-    .shell { max-width: 760px; margin: 0 auto; }
-    .brand-header { background: var(--header); padding: 28px 35px 32px; }
-    .brand-row { display: flex; align-items: center; gap: 18px; }
-    .round-menu { width: 64px; height: 64px; border: 0; background: #fff; color: #15325a; border-radius: 50%; font-size: 25px; cursor: pointer; }
-    .logo { font-size: 38px; letter-spacing: -.07em; font-weight: 850; white-space: nowrap; }
-    .logo b { display: inline-block; font-weight: 900; color: #10213b; background: var(--blue-light); border-radius: 15px; padding: 0 9px 3px; margin-right: 3px; }
-    .alerts-button { margin-left: auto; border: 0; background: white; color: #17345f; border-radius: 30px; padding: 17px 24px; font-weight: 700; cursor: pointer; }
-    .alerts-count { display: inline-grid; place-items: center; min-width: 28px; height: 24px; border-radius: 20px; background: var(--blue-light); margin-left: 8px; padding: 0 8px; }
-    .tagline { margin: 18px 0 0; font-size: 20px; color: #e0e9fa; }
-    main { padding: 24px 35px 48px; }
-    .screen { display: none; }
-    .screen.active { display: block; }
-    .pill-row { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 0 0 1px; margin-bottom: 26px; }
-    .pill-row::-webkit-scrollbar, .clips::-webkit-scrollbar { display: none; }
-    .pill { flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 16px 24px; border-radius: 999px; cursor: pointer; font-size: 17px; white-space: nowrap; }
-    .pill.active { background: var(--blue); border-color: var(--blue); color: var(--ink); }
-    .search { width: 100%; min-height: 78px; background: var(--surface); border: 1px solid var(--line); color: var(--text); border-radius: 14px; padding: 20px 22px; font-size: 19px; margin: 0 0 24px; }
-    .search::placeholder { color: #7e899b; }
-    .category-row { display: flex; gap: 13px; overflow-x: auto; scrollbar-width: none; margin-bottom: 27px; }
-    .category-row .pill { padding: 15px 24px; }
-    .notice { border-left: 7px solid var(--blue-light); background: var(--surface); color: var(--muted); padding: 17px 21px; margin: 0 0 23px; font-size: 18px; line-height: 1.55; }
-    .story { padding: 16px 0 30px; border-bottom: 1px solid var(--line); }
-    .story-meta, .story-stats { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--muted); font-size: 16px; }
-    .story-source { color: var(--blue); font-weight: 700; }
-    .story h2 { margin: 16px 0 12px; font-size: 24px; line-height: 1.3; letter-spacing: -.025em; }
-    .story h2 a { color: var(--text); text-decoration: none; }
-    .story h2 a:hover { color: var(--blue-light); }
-    .story-summary { color: var(--muted); line-height: 1.55; margin: 0 0 14px; }
-    .story-stats { font-size: 16px; }
-    .empty { color: var(--muted); padding: 20px; background: var(--surface); border-left: 7px solid var(--blue-light); }
-    .section-title { font-size: 25px; margin: 0 0 18px; }
-    .section-subtitle { color: var(--muted); line-height: 1.5; margin: -7px 0 22px; }
-    .profile-card { display: flex; align-items: flex-start; gap: 18px; padding: 22px 0; border-bottom: 1px solid var(--line); }
-    .avatar { flex: 0 0 74px; width: 74px; height: 74px; border-radius: 50%; background: var(--blue); color: var(--ink); display: grid; place-items: center; font-size: 24px; font-weight: 750; }
-    .profile-copy { flex: 1; min-width: 0; }
-    .profile-copy h3, .chat-row h3 { margin: 2px 0 6px; font-size: 19px; }
-    .profile-copy p, .chat-row p { margin: 0; color: var(--muted); line-height: 1.5; }
-    .follow-button { border: 1px solid var(--line); background: var(--surface); border-radius: 13px; padding: 14px 18px; cursor: pointer; font-weight: 650; }
-    .follow-button.following { background: var(--blue); color: var(--ink); border-color: var(--blue); }
-    .live-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .video-card { overflow: hidden; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); }
-    .video-art { min-height: 175px; display: grid; place-items: center; position: relative; background: radial-gradient(circle at 70% 22%, #416899, transparent 35%), linear-gradient(140deg, #193c66, #0d1b32 75%); }
-    .video-art::after { content: "▶"; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: #ffffffdc; color: #132847; padding-left: 4px; font-size: 20px; }
-    .live-badge { position: absolute; top: 13px; left: 13px; background: var(--danger); color: white; border-radius: 6px; padding: 6px 9px; font-size: 12px; font-weight: 800; letter-spacing: .06em; }
-    .video-body { padding: 16px; }
-    .video-body h3 { margin: 0 0 7px; font-size: 18px; }
-    .video-body p { margin: 0 0 14px; color: var(--muted); }
-    .watch-button, .primary-button { background: var(--blue); color: var(--ink); border: 0; border-radius: 11px; min-height: 48px; padding: 0 20px; font-weight: 750; cursor: pointer; }
-    .watch-button { width: 100%; }
-    .clips { display: flex; overflow-x: auto; gap: 14px; padding-bottom: 10px; }
-    .clip { flex: 0 0 170px; min-height: 196px; border-radius: 15px; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(160deg, #356a91, #101b32 75%); border: 1px solid var(--line); }
-    .clip:nth-child(2) { background: linear-gradient(160deg, #76548e, #101b32 75%); }
-    .clip:nth-child(3) { background: linear-gradient(160deg, #8b6943, #101b32 75%); }
-    .clip strong { font-size: 16px; }
-    .clip span { color: #d3def0; font-size: 13px; margin-top: 5px; }
-    .chat-list { margin-bottom: 24px; }
-    .chat-row { padding: 19px 0 22px; border-bottom: 1px solid var(--line); }
-    .signin-box, .settings-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
-    .signin-box h2 { margin: 0 0 8px; font-size: 22px; }
-    .signin-box p { color: var(--muted); margin: 0 0 17px; line-height: 1.5; }
-    .signin-actions { display: grid; gap: 10px; }
-    .signin-actions button { min-height: 53px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); font-weight: 700; cursor: pointer; }
-    .signin-actions .google { background: var(--blue); color: var(--ink); border-color: var(--blue); }
-    .disclaimer { color: var(--muted); font-size: 14px; margin: 15px 0 0 !important; }
-    .alert-panel { background: var(--blue-light); color: #10213a; padding: 15px 35px; }
-    .alert-panel div { padding: 13px 0; border-bottom: 1px solid #78a7d6; }
-    .alert-panel div:last-child { border-bottom: 0; }
-    .me-screen .signin-box { margin-bottom: 24px; }
-    .settings-heading { display: flex; justify-content: space-between; align-items: center; }
-    .settings-heading h2 { margin: 0; font-size: 23px; }
-    .settings-section { padding: 18px 0; border-bottom: 1px solid var(--line); }
-    .settings-section:last-child { border-bottom: 0; }
-    .settings-section h3 { margin: 0 0 12px; font-size: 17px; }
-    .settings-options { display: flex; flex-wrap: wrap; gap: 9px; }
-    .settings-options button, .profile-link { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 10px 15px; cursor: pointer; }
-    .settings-options button.selected { background: var(--blue); color: var(--ink); border-color: var(--blue); }
-    .profile-link { border-radius: 12px; width: 100%; margin-top: 14px; font-weight: 700; }
-    .bottom-nav { position: fixed; z-index: 20; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: #12223d; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px; margin: 0 auto; }
-    .nav-item { position: relative; border: 0; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer; }
-    .nav-item.active { color: var(--blue); font-weight: 750; }
-    .nav-item.active::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--blue-light); }
-    .toast { position: fixed; z-index: 50; bottom: calc(var(--nav-height) + 16px); left: 50%; transform: translateX(-50%); background: #e8f1ff; color: #10213a; padding: 13px 18px; border-radius: 12px; box-shadow: 0 6px 25px #0006; max-width: calc(100vw - 32px); }
-    .light-mode { --page: #f5f7fb; --header: #0c214f; --surface: #fff; --surface-2: #f0f4fa; --line: #d8e1ed; --text: #172338; --muted: #5f6e82; --ink: #10203a; }
-    .serif-mode { font-family: Georgia, "Times New Roman", serif; }
-    @media (min-width: 761px) { body { padding-bottom: 0; } .bottom-nav { position: sticky; margin-top: 0; } .shell { padding-bottom: var(--nav-height); } }
-    @media (max-width: 520px) {
-      .topbar { height: 118px; padding: 15px 22px; }
-      .topbar .right { gap: 12px; }
-      .brand-header { padding: 25px 20px 31px; }
-      .round-menu { width: 62px; height: 62px; }
-      .logo { font-size: 34px; }
-      .alerts-button { padding: 17px 20px; }
-      main { padding: 24px 20px 40px; }
-      .pill { padding: 15px 23px; }
-      .story h2 { font-size: 23px; }
-      .alert-panel { padding: 15px 20px; }
-      .live-grid { grid-template-columns: 1fr; }
-      .video-art { min-height: 190px; }
-      .story-meta, .story-stats { font-size: 15px; }
-    }
-    @media (prefers-reduced-motion: no-preference) { .screen.active { animation: enter .15s ease-out; } @keyframes enter { from { opacity: .7; transform: translateY(3px); } to { opacity: 1; transform: none; } } }
-  </style>
-</head>
-<body>
-  <div class="shell">
-    <header class="topbar" aria-label="Application toolbar">
-      <div class="left"><button class="icon-button" id="closeButton" aria-label="Close">×</button></div>
-      <div class="topbrand">60new</div>
-      <div class="right">
-        <button class="icon-button" id="accountButton" aria-label="Account">♙</button>
-        <button class="icon-button" id="shareButton" aria-label="Share">♧</button>
-        <button class="icon-button" id="moreButton" aria-label="More options">⋮</button>
-      </div>
-    </header>
-    <header class="brand-header">
-      <div class="brand-row">
-        <button class="round-menu" id="menuButton" aria-label="Open settings">☰</button>
-        <div class="logo" aria-label="60new"><b>60</b>new</div>
-        <button class="alerts-button" id="alertsButton">Alerts <span class="alerts-count">3</span></button>
-      </div>
-      <p class="tagline">Botswana news, all in one place.</p>
-    </header>
-    <div class="alert-panel" id="alertPanel" hidden aria-live="polite">
-      <div>Sample alert: breaking news from a newspaper</div>
-      <div>Sample alert: an account you follow posted</div>
-      <div>Sample alert: someone replied to your comment</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#071a2b" />
+    <title>60new</title>
+    <style>
+      :root {
+        --bg: #071a2b;
+        --bg-2: #0c1d31;
+        --panel: #12263f;
+        --panel-soft: rgba(121, 148, 180, 0.12);
+        --topbar: #111111;
+        --topbar-text: #f2f6ff;
+        --blue: #7bbaf7;
+        --blue-strong: #5ea8ef;
+        --blue-soft: #9dcaf7;
+        --text: #ebf2ff;
+        --muted: #b6c9df;
+        --line: rgba(145, 174, 209, 0.22);
+        --orange: #ff7b54;
+        --chip: rgba(125, 152, 183, 0.14);
+        --chip-active: #7bbaf7;
+        --header-blue: #0d2951;
+        --header-blue-2: #0f2347;
+        --shadow: rgba(0, 0, 0, 0.24);
+        --danger: #ff4d68;
+        --nav-active: #7bbaf7;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+      }
+
+      .app-shell {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        max-width: 760px;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .topbar {
+        height: 76px;
+        display: grid;
+        grid-template-columns: 52px 1fr 120px;
+        align-items: center;
+        padding: 0 16px 0 18px;
+        background: #0d0d0f;
+      }
+
+      .topbar .left,
+      .topbar .right {
+        display: flex;
+        align-items: center;
+      }
+
+      .topbar .right {
+        justify-content: flex-end;
+        gap: 14px;
+      }
+
+      .close-button,
+      .toolbar-icon {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--topbar-text);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .close-button {
+        font-size: 42px;
+        line-height: 1;
+        font-weight: 300;
+        padding: 0 4px 0 0;
+      }
+
+      .brand-center {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+      }
+
+      .toolbar-icon {
+        font-size: 19px;
+        width: 26px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .toolbar-icon.more {
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      .main-header {
+        background: linear-gradient(90deg, var(--header-blue) 0%, var(--header-blue-2) 100%);
+        padding: 20px 20px 18px;
+      }
+
+      .header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .menu-badge {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: #f4f7fb;
+        flex: 0 0 auto;
+        position: relative;
+      }
+
+      .menu-badge::before,
+      .menu-badge::after,
+      .menu-badge span {
+        content: "";
+        position: absolute;
+        left: 15px;
+        right: 15px;
+        height: 3px;
+        border-radius: 3px;
+        background: #102647;
+      }
+
+      .menu-badge::before { top: 18px; }
+      .menu-badge span { top: 25px; }
+      .menu-badge::after { top: 32px; }
+
+      .logo-wrap {
+        display: flex;
+        align-items: baseline;
+        gap: 0;
+        margin-left: 12px;
+      }
+
+      .big-60 {
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: -0.08em;
+        color: #edf3ff;
+        line-height: 0.9;
+      }
+
+      .big-new {
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: -0.08em;
+        color: #ebf2ff;
+        line-height: 0.9;
+      }
+
+      .alerts-pill {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 134px;
+        height: 54px;
+        border-radius: 999px;
+        background: #f4f7fb;
+        color: #102547;
+        font-weight: 700;
+        font-size: 18px;
+        padding: 0 22px;
+        border: 0;
+        cursor: pointer;
+      }
+
+      .tagline {
+        margin: 18px 0 0;
+        color: #dfeafc;
+        font-size: 22px;
+        letter-spacing: -0.03em;
+      }
+
+      .screen {
+        display: none;
+        padding: 12px 18px 110px;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .section-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin: 10px 0 22px;
+      }
+
+      .tab {
+        border: 1px solid var(--line);
+        background: rgba(135, 157, 185, 0.12);
+        color: var(--text);
+        min-height: 52px;
+        border-radius: 999px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+      }
+
+      .tab.active {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #07213e;
+      }
+
+      .searchbox {
+        width: 100%;
+        min-height: 62px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: rgba(124, 156, 190, 0.12);
+        color: var(--text);
+        padding: 18px 20px;
+        font-size: 18px;
+        outline: none;
+      }
+
+      .searchbox::placeholder {
+        color: rgba(208, 220, 239, 0.76);
+      }
+
+      .chip-row {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding: 20px 0 8px;
+        scrollbar-width: none;
+      }
+
+      .chip-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .chip {
+        border: 1px solid var(--line);
+        background: rgba(125, 152, 183, 0.12);
+        color: var(--text);
+        border-radius: 999px;
+        min-height: 42px;
+        padding: 9px 18px;
+        font-size: 16px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .chip.active {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #0c213e;
+      }
+
+      .news-block {
+        margin-top: 18px;
+      }
+
+      .sample-prelude {
+        background: rgba(92, 121, 164, 0.16);
+        border-left: 5px solid var(--blue-soft);
+        min-height: 84px;
+        border-radius: 12px;
+        padding: 18px 16px 18px 20px;
+        color: var(--text);
+        font-size: 18px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+      }
+
+      .story {
+        border-bottom: 1px solid var(--line);
+        padding: 18px 0 22px;
+      }
+
+      .story-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        font-size: 16px;
+        color: var(--muted);
+      }
+
+      .source-tag {
+        color: var(--muted);
+      }
+
+      .source-tag strong {
+        color: var(--text);
+        font-weight: 700;
+      }
+
+      .story h2 {
+        margin: 18px 0 16px;
+        font-size: clamp(26px, 3vw, 34px);
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+      }
+
+      .story h2 a {
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .story h2 a:hover {
+        color: var(--blue-soft);
+      }
+
+      .story-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .empty-state {
+        border-left: 5px solid var(--blue-soft);
+        background: rgba(97, 124, 166, 0.12);
+        border-radius: 12px;
+        padding: 18px 16px 18px 20px;
+        color: var(--muted);
+        margin-top: 22px;
+      }
+
+      .live-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin: 18px 0 12px;
+      }
+
+      .video-card {
+        border: 1px solid var(--line);
+        background: rgba(119, 148, 183, 0.11);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .video-preview {
+        position: relative;
+        height: 180px;
+        background: linear-gradient(135deg, rgba(72, 122, 185, 0.9), rgba(11, 20, 33, 1));
+      }
+
+      .video-preview::before {
+        content: "▶";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.9);
+        color: #102647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        padding-left: 4px;
+      }
+
+      .live-badge {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        background: var(--danger);
+        color: white;
+        border-radius: 6px;
+        padding: 5px 9px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+      }
+
+      .video-body {
+        padding: 14px 14px 18px;
+      }
+
+      .video-body h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .video-body p {
+        margin: 0 0 14px;
+        color: var(--muted);
+      }
+
+      .watch-btn,
+      .primary-btn,
+      .follow-btn {
+        border: 0;
+        border-radius: 11px;
+        background: var(--blue);
+        color: #0a2041;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .watch-btn {
+        width: 100%;
+        min-height: 42px;
+      }
+
+      .section-title {
+        margin: 18px 0 4px;
+        font-size: 26px;
+        letter-spacing: -0.04em;
+      }
+
+      .section-subtitle {
+        color: var(--muted);
+        margin: 0 0 18px;
+        line-height: 1.45;
+      }
+
+      .clip-row {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-bottom: 12px;
+      }
+
+      .clip-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .clip {
+        flex: 0 0 170px;
+        min-height: 168px;
+        border-radius: 15px;
+        background: linear-gradient(160deg, rgba(80,119,167,0.95), rgba(15,24,36,1));
+        border: 1px solid var(--line);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .clip:nth-child(2) { background: linear-gradient(160deg, rgba(101,83,154,0.95), rgba(15,24,36,1)); }
+      .clip:nth-child(3) { background: linear-gradient(160deg, rgba(118,90,46,0.95), rgba(15,24,36,1)); }
+      .clip strong {
+        font-size: 16px;
+        line-height: 1.2;
+      }
+      .clip span {
+        color: rgba(236, 242, 255, 0.8);
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .chat-list {
+        margin-top: 16px;
+      }
+
+      .chat-item {
+        border-bottom: 1px solid var(--line);
+        padding: 20px 0;
+      }
+
+      .chat-item h3 {
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+
+      .chat-item p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 17px;
+      }
+
+      .signin-box {
+        background: rgba(92, 121, 164, 0.12);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px 18px 20px;
+        margin-top: 20px;
+      }
+
+      .signin-box h2 {
+        margin: 0 0 10px;
+        font-size: 22px;
+      }
+
+      .signin-box p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .primary-btn {
+        min-height: 52px;
+        width: 100%;
+        font-size: 18px;
+      }
+
+      .me-box {
+        margin-top: 10px;
+      }
+
+      .profile-panel {
+        background: rgba(122, 146, 176, 0.12);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px 14px 14px;
+      }
+
+      .settings-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .settings-head h3 {
+        margin: 0;
+        font-size: 19px;
+      }
+
+      .settings-head span {
+        color: var(--muted);
+        font-size: 20px;
+      }
+
+      .setting-group {
+        border-top: 1px solid var(--line);
+        padding-top: 18px;
+        margin-top: 18px;
+      }
+
+      .setting-group:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .setting-group h4 {
+        margin: 0 0 12px;
+        font-size: 17px;
+      }
+
+      .segmented {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .seg-btn {
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        border-radius: 999px;
+        min-height: 38px;
+        padding: 8px 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .seg-btn.selected {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #0a2041;
+      }
+
+      .profile-link {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid var(--line);
+        background: rgba(125, 156, 188, 0.08);
+        color: var(--text);
+        border-radius: 12px;
+        margin-top: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .bottom-nav {
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: min(760px, 100%);
+        height: 92px;
+        background: rgba(10, 29, 47, 0.96);
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        z-index: 20;
+      }
+
+      .nav-item {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        padding-top: 16px;
+      }
+
+      .nav-item.active {
+        color: var(--text);
+      }
+
+      .nav-item.active::before {
+        content: "";
+        position: absolute;
+        left: 15%;
+        right: 15%;
+        top: 0;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--blue);
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 112px;
+        transform: translateX(-50%);
+        background: #edf3ff;
+        color: #102647;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-weight: 600;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        z-index: 30;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+
+      @media (max-width: 560px) {
+        .topbar {
+          grid-template-columns: 44px 1fr 100px;
+          padding: 0 12px 0 16px;
+        }
+
+        .brand-center {
+          font-size: 20px;
+        }
+
+        .main-header {
+          padding: 18px 16px 18px;
+        }
+
+        .section-tabs {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .live-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .screen {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="left"><button class="close-button" aria-label="Close">×</button></div>
+        <div class="brand-center">60new</div>
+        <div class="right">
+          <button class="toolbar-icon" aria-label="Search">⌕</button>
+          <button class="toolbar-icon" aria-label="Notifications">⇪</button>
+          <button class="toolbar-icon more" aria-label="More">⋮</button>
+        </div>
+      </header>
+
+      <header class="main-header">
+        <div class="header-row">
+          <div class="menu-badge"><span></span></div>
+          <div class="logo-wrap" aria-label="60new logo">
+            <span class="big-60">60</span>
+            <span class="big-new">new</span>
+          </div>
+          <button class="alerts-pill" type="button">Alerts <span style="margin-left:6px">3</span></button>
+        </div>
+        <p class="tagline">Botswana news, all in one place.</p>
+      </header>
+
+      <main>
+        <section class="screen active" id="homeScreen">
+          <div class="section-tabs" role="tablist" aria-label="News filters">
+            <button class="tab active" type="button">Top headlines</button>
+            <button class="tab" type="button">Most viewed</button>
+            <button class="tab" type="button">Following</button>
+            <button class="tab" type="button">Saved</button>
+          </div>
+
+          <input id="homeSearch" class="searchbox" type="search" placeholder="Search stories, topics and accounts" aria-label="Search stories" />
+
+          <div id="homeCategories" class="chip-row" aria-label="Categories"></div>
+
+          <div class="news-block" id="newsList"></div>
+        </section>
+
+        <section class="screen" id="liveScreen">
+          <h2 class="section-title">Live now</h2>
+          <p class="section-subtitle">Watch live updates, events, and quick coverage from around Botswana.</p>
+
+          <div class="live-grid">
+            <article class="video-card">
+              <div class="video-preview"><span class="live-badge">● LIVE</span></div>
+              <div class="video-body">
+                <h3>Latest headlines live</h3>
+                <p>News desk · Live coverage</p>
+                <button class="watch-btn" type="button">Watch</button>
+              </div>
+            </article>
+
+            <article class="video-card">
+              <div class="video-preview"><span class="live-badge">● LIVE</span></div>
+              <div class="video-body">
+                <h3>Gaborone community update</h3>
+                <p>Community · Live now</p>
+                <button class="watch-btn" type="button">Watch</button>
+              </div>
+            </article>
+          </div>
+
+          <h3 class="section-title" style="margin-top:28px;">Short clips</h3>
+          <div class="clip-row">
+            <article class="clip"><strong>Today in Botswana</strong><span>News brief · 0:30</span></article>
+            <article class="clip"><strong>Sport action</strong><span>Highlights · 0:45</span></article>
+            <article class="clip"><strong>Local voices</strong><span>Community · 0:28</span></article>
+            <article class="clip"><strong>What’s happening</strong><span>Daily clip · 0:35</span></article>
+          </div>
+        </section>
+
+        <section class="screen" id="exploreScreen">
+          <h2 class="section-title">Explore</h2>
+          <p class="section-subtitle">Find schools, universities, companies, institutions, and local communities.</p>
+
+          <input id="exploreSearch" class="searchbox" type="search" placeholder="Search accounts and topics" aria-label="Explore search" />
+
+          <div id="exploreCategories" class="chip-row" aria-label="Explore categories"></div>
+          <div id="profileList" style="margin-top:18px;"></div>
+        </section>
+
+        <section class="screen" id="chatScreen">
+          <div class="sample-prelude" style="margin-top: 10px;">Preview with sample chats. Real chat needs sign-in so people can be identified and blocked.</div>
+
+          <div class="chat-list">
+            <article class="chat-item">
+              <h3>Neo</h3>
+              <p>Sample message from Neo.</p>
+            </article>
+            <article class="chat-item">
+              <h3>Kabo</h3>
+              <p>Sample message from Kabo.</p>
+            </article>
+            <article class="chat-item">
+              <h3>Gaborone room</h3>
+              <p>Sample message in the room.</p>
+            </article>
+          </div>
+
+          <div class="signin-box">
+            <h2>Join 60new to chat</h2>
+            <p>Sign in to send messages, join rooms and connect with people.</p>
+            <button class="primary-btn" type="button">Sign in to continue</button>
+          </div>
+        </section>
+
+        <section class="screen" id="meScreen">
+          <div class="signin-box me-box">
+            <h2>Join 60new</h2>
+            <p>Sign in to comment, follow accounts and chat.</p>
+            <div style="display:grid; gap:10px;">
+              <button class="primary-btn" type="button">Continue with Google</button>
+              <button class="primary-btn" type="button" style="background: rgba(125, 156, 188, 0.12); color: var(--text); border: 1px solid var(--line);">Continue with phone number</button>
+              <button class="primary-btn" type="button" style="background: rgba(125, 156, 188, 0.12); color: var(--text); border: 1px solid var(--line);">Continue with email</button>
+            </div>
+            <p style="margin-top:16px; color: var(--muted);">Preview only. No account is created.</p>
+          </div>
+
+          <div class="profile-panel">
+            <div class="settings-head">
+              <h3>Settings and privacy</h3>
+              <span>▴</span>
+            </div>
+
+            <div class="setting-group">
+              <h4>Color mode</h4>
+              <div class="segmented" id="colorMode">
+                <button class="seg-btn selected" type="button">Dark</button>
+                <button class="seg-btn" type="button">Light</button>
+                <button class="seg-btn" type="button">System</button>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <h4>Font style</h4>
+              <div class="segmented" id="fontMode">
+                <button class="seg-btn selected" type="button">Default</button>
+                <button class="seg-btn" type="button">Serif</button>
+                <button class="seg-btn" type="button">Large</button>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <h4>Preferences</h4>
+              <div class="segmented">
+                <button class="seg-btn selected" type="button">Haptic feedback</button>
+                <button class="seg-btn" type="button">Always full screen</button>
+              </div>
+            </div>
+
+            <button class="profile-link" type="button">Profile</button>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item active" type="button" data-screen="home">Home</button>
+        <button class="nav-item" type="button" data-screen="live">Live</button>
+        <button class="nav-item" type="button" data-screen="explore">Explore</button>
+        <button class="nav-item" type="button" data-screen="chat">Chat</button>
+        <button class="nav-item" type="button" data-screen="me">Me</button>
+      </nav>
     </div>
-    <main>
-      <section class="screen active" id="homeScreen" aria-label="Home">
-        <div class="pill-row" id="feedTabs" role="tablist" aria-label="News feed type">
-          <button class="pill active" data-feed="Top headlines">Top headlines</button><button class="pill" data-feed="Most viewed">Most viewed</button><button class="pill" data-feed="Following">Following</button><button class="pill" data-feed="Saved">Saved</button>
-        </div>
-        <input class="search" id="newsSearch" type="search" placeholder="Search stories, topics and accounts" aria-label="Search stories, topics and accounts">
-        <div class="category-row" id="newsCategories" aria-label="News categories"></div>
-        <div class="notice">Preview with sample headlines. Real stories load from the newspapers’ feeds once the collector is built.</div>
-        <div id="newsList" aria-live="polite"><p class="empty">Loading headlines…</p></div>
-      </section>
 
-      <section class="screen" id="liveScreen" aria-label="Live">
-        <h1 class="section-title">Live now</h1>
-        <p class="section-subtitle">Watch live updates and highlights from Botswana.</p>
-        <div class="live-grid">
-          <article class="video-card"><div class="video-art"><span class="live-badge">● LIVE</span></div><div class="video-body"><h3>Latest headlines live</h3><p>News desk · Live coverage</p><button class="watch-button" data-action="watch">Watch</button></div></article>
-          <article class="video-card"><div class="video-art"><span class="live-badge">● LIVE</span></div><div class="video-body"><h3>Gaborone community update</h3><p>Community · Live now</p><button class="watch-button" data-action="watch">Watch</button></div></article>
-        </div>
-        <h2 class="section-title" style="margin-top:32px">Short clips</h2>
-        <p class="section-subtitle">Quick updates you can swipe through.</p>
-        <div class="clips"><article class="clip"><strong>Today in Botswana</strong><span>News brief · 0:30</span></article><article class="clip"><strong>Sports moments</strong><span>Highlights · 0:45</span></article><article class="clip"><strong>Local voices</strong><span>Community · 0:28</span></article><article class="clip"><strong>What’s happening</strong><span>Daily clip · 0:35</span></article></div>
-      </section>
+    <div id="toast" class="toast" aria-live="polite"></div>
 
-      <section class="screen" id="exploreScreen" aria-label="Explore">
-        <h1 class="section-title">Explore</h1>
-        <p class="section-subtitle">Find schools, universities, companies and other accounts to follow.</p>
-        <input class="search" id="exploreSearch" type="search" placeholder="Search accounts and topics" aria-label="Search accounts and topics">
-        <div class="category-row" id="exploreCategories" aria-label="Explore categories"></div>
-        <div id="profileList"></div>
-      </section>
-
-      <section class="screen" id="chatScreen" aria-label="Chat">
-        <div class="notice">Preview with sample chats. Real chat needs sign-in so people can be identified and blocked.</div>
-        <div class="chat-list">
-          <article class="chat-row"><h3>Neo</h3><p>Sample message from Neo.</p></article>
-          <article class="chat-row"><h3>Kabo</h3><p>Sample message from Kabo.</p></article>
-          <article class="chat-row"><h3>Gaborone room</h3><p>Sample message in the room.</p></article>
-        </div>
-        <div class="signin-box"><h2>Join 60new to chat</h2><p>Sign in to send messages, join rooms and connect with people.</p><button class="primary-button" data-action="signin">Sign in to continue</button></div>
-      </section>
-
-      <section class="screen me-screen" id="meScreen" aria-label="Me and profile">
-        <div class="signin-box"><h2>Join 60new</h2><p>Sign in to comment, follow accounts and chat.</p><div class="signin-actions"><button class="google" data-action="signin">Continue with Google</button><button data-action="signin">Continue with phone number</button><button data-action="signin">Continue with email</button></div><p class="disclaimer">Preview only. No account is created.</p></div>
-        <div class="settings-card" id="settingsCard">
-          <div class="settings-heading"><h2>Settings and privacy</h2><span aria-hidden="true">▴</span></div>
-          <div class="settings-section"><h3>Account · Not signed in</h3><p class="section-subtitle">Want more 60new? Upgrade for extra features.</p><button class="primary-button" data-action="upgrade">Upgrade</button><button class="profile-link" data-action="profile">Profile</button></div>
-          <div class="settings-section"><h3>Color mode</h3><div class="settings-options" data-setting="color"><button class="selected" data-value="dark">Dark</button><button data-value="light">Light</button><button data-value="system">System</button></div></div>
-          <div class="settings-section"><h3>Font style</h3><div class="settings-options" data-setting="font"><button class="selected" data-value="default">Default</button><button data-value="serif">Serif</button><button data-value="large">Large</button></div></div>
-          <div class="settings-section"><h3>Preferences</h3><div class="settings-options"><button class="selected" id="hapticToggle" aria-pressed="true">Haptic feedback: On</button><button id="fullscreenToggle" aria-pressed="false">Always full screen in chats and stories</button></div><p class="section-subtitle" style="margin:12px 0 0">Full screen hides the bottom bar. The Menu still opens every section.</p></div>
-          <div class="settings-section"><h3>Privacy</h3><button class="profile-link" data-action="privacy">Privacy and safety</button></div>
-        </div>
-      </section>
-    </main>
-    <nav class="bottom-nav" aria-label="Main navigation">
-      <button class="nav-item active" data-screen="home">Home</button><button class="nav-item" data-screen="live">Live</button><button class="nav-item" data-screen="explore">Explore</button><button class="nav-item" data-screen="chat">Chat</button><button class="nav-item" data-screen="me">Me</button>
-    </nav>
-  </div>
-  <div id="toast" class="toast" role="status" hidden></div>
-  <script>
-    (() => {
-      const categories = ["All", "Good news", "Bad news", "Politics", "Business", "Sport", "Entertainment", "Education", "Other"];
-      const exploreCategories = ["All", "Schools", "Universities", "Companies", "News", "Community"];
-      const profiles = [
-        { name: "Sample secondary school", type: "Schools", description: "School updates, events and announcements." },
-        { name: "Sample university", type: "Universities", description: "Campus news, research and student updates." },
-        { name: "Sample Botswana company", type: "Companies", description: "Company news, opportunities and updates." },
-        { name: "Police service", type: "Community", description: "Official account · Public safety updates." },
-        { name: "Botswana Guardian", type: "News", description: "News and headlines from Botswana." }
-      ];
-      const screens = { home: "homeScreen", live: "liveScreen", explore: "exploreScreen", chat: "chatScreen", me: "meScreen" };
-      const state = { screen: "home", feed: "Top headlines", category: "All", exploreCategory: "All", news: [], saved: new Set(), followed: new Set(["Police service"]), query: "" };
-      const newsList = document.getElementById("newsList");
-      const toast = document.getElementById("toast");
-      let toastTimer;
-      const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
-      const safeLink = value => { try { const url = new URL(value, location.href); return /^https?:$/.test(url.protocol) ? url.href : "#"; } catch { return "#"; } };
-      const dateLabel = value => {
-        if (!value) return "";
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return "";
-        const days = Math.floor((Date.now() - date.getTime()) / 86400000);
-        if (days < 0) return "Recently";
-        if (days === 0) return `${Math.max(1, Math.floor((Date.now() - date.getTime()) / 3600000))} hours ago`;
-        if (days === 1) return "Yesterday";
-        return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(date);
+    <script>
+      const state = {
+        currentScreen: 'home',
+        category: 'All',
+        exploreCategory: 'All',
+        feed: 'Top headlines',
+        query: '',
+        news: [],
+        savedLinks: new Set(),
+        followed: new Set(['Police service'])
       };
+
+      const screenMap = {
+        home: document.getElementById('homeScreen'),
+        live: document.getElementById('liveScreen'),
+        explore: document.getElementById('exploreScreen'),
+        chat: document.getElementById('chatScreen'),
+        me: document.getElementById('meScreen')
+      };
+
+      const toast = document.getElementById('toast');
+      const homeCategories = ['All', 'Good news', 'Bad news', 'Politics', 'Business', 'Sport', 'Education'];
+      const exploreCategories = ['All', 'Schools', 'Universities', 'Companies', 'News', 'Community'];
+      const profileData = [
+        { name: 'Sample secondary school', type: 'Schools', description: 'School updates, events and announcements.' },
+        { name: 'Sample university', type: 'Universities', description: 'Campus news, research and student updates.' },
+        { name: 'Sample Botswana company', type: 'Companies', description: 'Market updates, hiring and community action.' },
+        { name: 'Police service', type: 'Community', description: 'Official account · public safety updates.' },
+        { name: 'Botswana Guardian', type: 'News', description: 'News and headlines from Botswana.' }
+      ];
+
       function showToast(message) {
-        toast.textContent = message; toast.hidden = false; clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => { toast.hidden = true; }, 2600);
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(showToast._timer);
+        showToast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
       }
+
       function setScreen(name) {
-        if (!screens[name]) return;
-        state.screen = name;
-        document.querySelectorAll(".screen").forEach(el => el.classList.toggle("active", el.id === screens[name]));
-        document.querySelectorAll(".nav-item").forEach(el => el.classList.toggle("active", el.dataset.screen === name));
-        if (name === "explore") renderProfiles();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-      function renderPills(container, entries, selected, onSelect) {
-        container.replaceChildren();
-        entries.forEach(label => {
-          const button = document.createElement("button"); button.className = `pill${label === selected ? " active" : ""}`; button.textContent = label;
-          button.setAttribute("aria-pressed", String(label === selected)); button.addEventListener("click", () => onSelect(label)); container.append(button);
+        state.currentScreen = name;
+        Object.entries(screenMap).forEach(([key, el]) => {
+          el.classList.toggle('active', key === name);
+        });
+        document.querySelectorAll('.nav-item').forEach(button => {
+          button.classList.toggle('active', button.dataset.screen === name);
         });
       }
-      function storyHTML(item, index) {
-        const title = escapeHTML(item.title || "Untitled headline");
-        const source = escapeHTML(item.source || "News");
-        const topic = escapeHTML(item.topic || "Other");
-        const published = escapeHTML(dateLabel(item.published));
-        const summary = item.summary ? `<p class="story-summary">${escapeHTML(item.summary)}</p>` : "";
-        const link = safeLink(item.link);
-        const views = item.views ? escapeHTML(item.views) : `${(9.7 - index * 1.3).toFixed(1)}k`;
-        const saved = state.saved.has(item.link || item.title);
-        return `<article class="story"><div class="story-meta"><span class="story-source">${source}, ${topic}</span><time>${published}</time></div><h2><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">${title}</a></h2>${summary}<div class="story-stats"><span>${views} views</span><span>${escapeHTML(item.comments ?? 1)} comments</span></div><div class="story-actions"><button class="settings-options-button save-story" data-save="${escapeHTML(item.link || item.title || index)}">${saved ? "Saved" : "Save story"}</button></div></article>`;
+
+      function renderTabs(container, values, selected, onSelect) {
+        container.innerHTML = '';
+        values.forEach(value => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chip' + (value === selected ? ' active' : '');
+          btn.textContent = value;
+          btn.addEventListener('click', () => onSelect(value));
+          container.appendChild(btn);
+        });
       }
+
+      function renderHomeTabs() {
+        document.querySelectorAll('.tab').forEach(button => {
+          button.classList.toggle('active', button.textContent.trim() === state.feed);
+        });
+      }
+
+      function timeAgo(dateString) {
+        if (!dateString) return 'Recently';
+        const date = new Date(dateString);
+        if (Number.isNaN(date.getTime())) return 'Recently';
+        const diffMs = Date.now() - date.getTime();
+        const mins = Math.max(1, Math.round(diffMs / 60000));
+        if (mins < 60) return mins + ' minutes ago';
+        const hours = Math.round(mins / 60);
+        if (hours < 24) return hours + ' hours ago';
+        const days = Math.round(hours / 24);
+        return days + ' days ago';
+      }
+
+      function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, ch => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[ch]));
+      }
+
       function renderNews() {
+        const list = document.getElementById('newsList');
         let items = [...state.news];
+
+        if (state.feed === 'Saved') {
+          items = items.filter(item => state.savedLinks.has(item.link || item.title));
+        }
+
+        if (state.category !== 'All') {
+          items = items.filter(item => (item.topic || 'Other') === state.category);
+        }
+
         const query = state.query.trim().toLowerCase();
-        if (state.feed === "Saved") items = items.filter(item => state.saved.has(item.link || item.title));
-        if (state.feed === "Following") items = items.filter(item => state.followed.has(item.source));
-        if (state.category !== "All") items = items.filter(item => String(item.topic || "Other").toLowerCase() === state.category.toLowerCase());
-        if (query) items = items.filter(item => [item.title, item.summary, item.source, item.topic].some(value => String(value || "").toLowerCase().includes(query)));
-        if (state.feed === "Most viewed") items = items.map((item, index) => ({ item, index })).sort((a, b) => (Number(b.item.views) || 0) - (Number(a.item.views) || 0) || a.index - b.index).map(entry => entry.item);
+        if (query) {
+          items = items.filter(item => {
+            const text = [item.title, item.summary, item.source, item.topic].join(' ').toLowerCase();
+            return text.includes(query);
+          });
+        }
+
         if (!items.length) {
-          newsList.innerHTML = `<p class="empty">${state.feed === "Saved" ? "Nothing found. Try another word or topic." : "No matching stories found."}</p>`;
+          list.innerHTML = '<div class="empty-state">Nothing found. Try another word or topic.</div>';
           return;
         }
-        newsList.innerHTML = items.map((item, index) => storyHTML(item, index)).join("");
-        newsList.querySelectorAll(".save-story").forEach(button => button.addEventListener("click", () => {
-          const item = state.news.find(story => (story.link || story.title) === button.dataset.save);
-          if (!item) return;
-          const key = item.link || item.title;
-          state.saved.has(key) ? state.saved.delete(key) : state.saved.add(key);
-          renderNews();
-        }));
+
+        list.innerHTML = items.map((item, index) => {
+          const source = escapeHtml(item.source || 'News');
+          const title = escapeHtml(item.title || 'Untitled headline');
+          const summary = item.summary ? '<p style="margin:0; color: var(--muted); line-height: 1.6;">' + escapeHtml(item.summary) + '</p>' : '';
+          const topic = escapeHtml(item.topic || 'Other');
+          const published = escapeHtml(timeAgo(item.published));
+          const views = escapeHtml(item.views || `${(9.8 - index * 0.7).toFixed(1)}k`);
+          const comments = escapeHtml(item.comments || '1');
+          const key = escapeHtml(item.link || item.title || String(index));
+          const saved = state.savedLinks.has(item.link || item.title) ? 'Saved' : 'Save';
+
+          return `
+            <article class="story">
+              <div class="story-meta">
+                <div class="source-tag"><strong>${source}</strong>, ${topic}</div>
+                <div>${published}</div>
+              </div>
+              <h2><a href="${escapeHtml(item.link || '#')}" target="_blank" rel="noreferrer noopener">${title}</a></h2>
+              ${summary}
+              <div class="story-stats" style="margin-top: 14px;">
+                <span>${views} views</span>
+                <span>${comments} comments</span>
+              </div>
+              <div style="margin-top: 12px; display:flex; justify-content:flex-end;">
+                <button type="button" class="seg-btn ${state.savedLinks.has(item.link || item.title) ? 'selected' : ''}" data-save="${key}">${saved}</button>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        list.querySelectorAll('[data-save]').forEach(button => {
+          button.addEventListener('click', () => {
+            const target = button.dataset.save;
+            const match = state.news.find(item => (item.link || item.title) === target);
+            if (!match) return;
+            const key = match.link || match.title;
+            if (state.savedLinks.has(key)) {
+              state.savedLinks.delete(key);
+            } else {
+              state.savedLinks.add(key);
+            }
+            renderNews();
+          });
+        });
       }
+
+      function renderExplore() {
+        const profileList = document.getElementById('profileList');
+        const query = document.getElementById('exploreSearch').value.trim().toLowerCase();
+        const filtered = profileData.filter(profile => {
+          const categoryMatch = state.exploreCategory === 'All' || profile.type === state.exploreCategory;
+          const text = `${profile.name} ${profile.type} ${profile.description}`.toLowerCase();
+          const queryMatch = !query || text.includes(query);
+          return categoryMatch && queryMatch;
+        });
+
+        if (!filtered.length) {
+          profileList.innerHTML = '<div class="empty-state">No accounts found. Try another search or category.</div>';
+          return;
+        }
+
+        profileList.innerHTML = filtered.map(profile => {
+          const name = escapeHtml(profile.name);
+          const type = escapeHtml(profile.type);
+          const description = escapeHtml(profile.description);
+          const isFollowing = state.followed.has(profile.name);
+
+          return `
+            <article class="chat-item" style="display:flex; align-items:flex-start; gap:14px;">
+              <div style="width:52px; height:52px; border-radius:50%; background: var(--blue); color: #0d2348; display:flex; align-items:center; justify-content:center; font-weight:800; flex:0 0 auto;">${name.charAt(0)}</div>
+              <div style="flex:1; min-width:0;">
+                <h3 style="margin-bottom:5px;">${name}</h3>
+                <p style="margin-bottom:6px; color: var(--muted);">${type}</p>
+                <p>${description}</p>
+              </div>
+              <button type="button" class="seg-btn ${isFollowing ? 'selected' : ''}" data-follow="${escapeHtml(profile.name)}">${isFollowing ? 'Following' : 'Follow'}</button>
+            </article>
+          `;
+        }).join('');
+
+        profileList.querySelectorAll('[data-follow]').forEach(button => {
+          button.addEventListener('click', () => {
+            const name = button.dataset.follow;
+            if (state.followed.has(name)) {
+              state.followed.delete(name);
+            } else {
+              state.followed.add(name);
+            }
+            renderExplore();
+          });
+        });
+      }
+
       async function loadNews() {
         try {
-          const response = await fetch("./news.json", { cache: "no-store" });
-          if (!response.ok) throw new Error(`Request failed (${response.status})`);
+          const response = await fetch('./news.json', { cache: 'no-store' });
+          if (!response.ok) throw new Error('news.json not found');
           const data = await response.json();
-          state.news = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
+          const items = Array.isArray(data.items) ? data.items : (Array.isArray(data) ? data : []);
+          state.news = items.map(item => ({
+            ...item,
+            topic: item.topic || 'Other',
+            views: item.views || (Math.random() * 5000 + 800).toFixed(1) + 'k',
+            comments: item.comments || '1'
+          }));
           renderNews();
-          const updated = data.updated ? dateLabel(data.updated) : "";
-          if (updated) document.querySelector("#homeScreen .notice").textContent = `Latest headlines · Updated ${updated}. Stories are collected from Botswana news sources.`;
         } catch (error) {
-          console.error("Unable to load news.json", error);
-          newsList.innerHTML = '<p class="empty">Headlines could not be loaded. Check that news.json is published beside index.html, then try again.</p><button class="primary-button" id="retryNews">Try again</button>';
-          document.getElementById("retryNews").addEventListener("click", loadNews);
+          const fallback = [
+            { source: 'Sunday Standard', title: 'Sample headline about business', topic: 'Business', published: new Date(Date.now() - 5*3600*1000).toISOString(), summary: 'Preview with sample headlines. Real stories load from the newspapers\' feeds once the collector is built.', link: '#', views: '3.1k', comments: '1' },
+            { source: 'Botswana Guardian', title: 'Sample headline about sport', topic: 'Sport', published: new Date(Date.now() - 18*3600*1000).toISOString(), summary: 'Preview with sample sports news. Real stories will appear once the collector is live.', link: '#', views: '9.7k', comments: '1' },
+            { source: 'The Voice', title: 'Sample headline about education', topic: 'Education', published: new Date(Date.now() - 2*86400000).toISOString(), summary: 'Sample education headline that will be replaced by live data after collection.', link: '#', views: '2.3k', comments: '1' }
+          ];
+          state.news = fallback;
+          renderNews();
+          showToast('news.json not found; showing sample headlines.');
         }
       }
-      function renderProfiles() {
-        const query = document.getElementById("exploreSearch").value.trim().toLowerCase();
-        const filtered = profiles.filter(profile => (state.exploreCategory === "All" || profile.type === state.exploreCategory) && (!query || `${profile.name} ${profile.type} ${profile.description}`.toLowerCase().includes(query)));
-        const list = document.getElementById("profileList");
-        if (!filtered.length) { list.innerHTML = '<p class="empty">No accounts found. Try a different search or category.</p>'; return; }
-        list.innerHTML = filtered.map(profile => `<article class="profile-card"><div class="avatar" aria-hidden="true">${escapeHTML(profile.name.charAt(0))}</div><div class="profile-copy"><h3>${escapeHTML(profile.name)}</h3><p>${escapeHTML(profile.type)} · ${escapeHTML(profile.description)}</p></div><button class="follow-button${state.followed.has(profile.name) ? " following" : ""}" data-profile="${escapeHTML(profile.name)}">${state.followed.has(profile.name) ? "Following" : "Follow"}</button></article>`).join("");
-        list.querySelectorAll(".follow-button").forEach(button => button.addEventListener("click", () => {
-          const name = button.dataset.profile;
-          state.followed.has(name) ? state.followed.delete(name) : state.followed.add(name);
-          renderProfiles();
-        }));
+
+      function bindEvents() {
+        document.querySelectorAll('.nav-item').forEach(button => {
+          button.addEventListener('click', () => setScreen(button.dataset.screen));
+        });
+
+        document.querySelectorAll('.tab').forEach(button => {
+          button.addEventListener('click', () => {
+            state.feed = button.textContent.trim();
+            renderHomeTabs();
+            renderNews();
+          });
+        });
+
+        renderTabs(document.getElementById('homeCategories'), homeCategories, state.category, value => {
+          state.category = value;
+          renderTabs(document.getElementById('homeCategories'), homeCategories, state.category, (next) => {
+            state.category = next;
+            renderNews();
+          });
+          renderNews();
+        });
+
+        renderTabs(document.getElementById('exploreCategories'), exploreCategories, state.exploreCategory, value => {
+          state.exploreCategory = value;
+          renderTabs(document.getElementById('exploreCategories'), exploreCategories, state.exploreCategory, (next) => {
+            state.exploreCategory = next;
+            renderExplore();
+          });
+          renderExplore();
+        });
+
+        document.getElementById('homeSearch').addEventListener('input', (event) => {
+          state.query = event.target.value;
+          renderNews();
+        });
+
+        document.getElementById('exploreSearch').addEventListener('input', renderExplore);
+
+        document.querySelectorAll('.seg-btn').forEach(button => {
+          button.addEventListener('click', () => {
+            const group = button.parentElement;
+            group.querySelectorAll('.seg-btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+          });
+        });
+
+        document.querySelectorAll('.primary-btn, .watch-btn').forEach(button => {
+          button.addEventListener('click', () => showToast('Preview mode only. Connect your backend to enable live actions.'));
+        });
+
+        document.querySelector('.alerts-pill').addEventListener('click', () => {
+          showToast('Alerts panel is preview-only.');
+        });
       }
-      renderPills(document.getElementById("newsCategories"), categories, state.category, value => { state.category = value; renderPills(document.getElementById("newsCategories"), categories, state.category, arguments.callee); renderNews(); });
-      // Re-rendering category controls without recursive callbacks keeps the selected state accessible.
-      function selectNewsCategory(value) { state.category = value; renderPills(document.getElementById("newsCategories"), categories, state.category, selectNewsCategory); renderNews(); }
-      renderPills(document.getElementById("newsCategories"), categories, state.category, selectNewsCategory);
-      renderPills(document.getElementById("exploreCategories"), exploreCategories, state.exploreCategory, value => {
-        state.exploreCategory = value; renderPills(document.getElementById("exploreCategories"), exploreCategories, state.exploreCategory, arguments.callee); renderProfiles();
-      });
-      function selectExploreCategory(value) { state.exploreCategory = value; renderPills(document.getElementById("exploreCategories"), exploreCategories, state.exploreCategory, selectExploreCategory); renderProfiles(); }
-      renderPills(document.getElementById("exploreCategories"), exploreCategories, state.exploreCategory, selectExploreCategory);
-      document.querySelectorAll(".nav-item").forEach(button => button.addEventListener("click", () => setScreen(button.dataset.screen)));
-      document.querySelectorAll("#feedTabs .pill").forEach(button => button.addEventListener("click", () => {
-        state.feed = button.dataset.feed; document.querySelectorAll("#feedTabs .pill").forEach(tab => { tab.classList.toggle("active", tab === button); tab.setAttribute("aria-selected", String(tab === button)); }); renderNews();
-      }));
-      document.getElementById("newsSearch").addEventListener("input", event => { state.query = event.target.value; renderNews(); });
-      document.getElementById("exploreSearch").addEventListener("input", renderProfiles);
-      document.getElementById("alertsButton").addEventListener("click", () => { const panel = document.getElementById("alertPanel"); panel.hidden = !panel.hidden; });
-      document.getElementById("menuButton").addEventListener("click", () => { setScreen("me"); document.getElementById("settingsCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
-      document.getElementById("accountButton").addEventListener("click", () => setScreen("me"));
-      document.getElementById("moreButton").addEventListener("click", () => showToast("More options are available in Settings and privacy."));
-      document.getElementById("closeButton").addEventListener("click", () => showToast("You’re viewing 60new."));
-      document.getElementById("shareButton").addEventListener("click", async () => {
-        try { if (navigator.share) await navigator.share({ title: "60new", text: "Botswana news, all in one place.", url: location.href }); else { await navigator.clipboard.writeText(location.href); showToast("Link copied to clipboard."); } }
-        catch { showToast("Sharing cancelled."); }
-      });
-      document.addEventListener("click", event => {
-        const setting = event.target.closest("[data-setting] button");
-        if (setting) {
-          const group = setting.closest("[data-setting]"); group.querySelectorAll("button").forEach(button => button.classList.toggle("selected", button === setting));
-          if (group.dataset.setting === "color") {
-            document.documentElement.classList.toggle("light-mode", setting.dataset.value === "light");
-            if (setting.dataset.value === "system") document.documentElement.classList.toggle("light-mode", matchMedia("(prefers-color-scheme: light)").matches);
-          }
-          if (group.dataset.setting === "font") { document.documentElement.classList.toggle("serif-mode", setting.dataset.value === "serif"); document.documentElement.style.fontSize = setting.dataset.value === "large" ? "18px" : ""; }
-        }
-        const action = event.target.closest("[data-action]")?.dataset.action;
-        if (action === "signin") showToast("Sign-in is a preview and isn’t connected yet.");
-        if (action === "upgrade") showToast("Upgrade options will be available soon.");
-        if (action === "profile") showToast("Profile setup is available after sign-in.");
-        if (action === "privacy") showToast("Privacy and safety settings.");
-        if (action === "watch") showToast("Live video preview is not connected yet.");
-      });
-      document.getElementById("hapticToggle").addEventListener("click", event => { const button = event.currentTarget; const on = button.getAttribute("aria-pressed") !== "true"; button.setAttribute("aria-pressed", String(on)); button.textContent = `Haptic feedback: ${on ? "On" : "Off"}`; button.classList.toggle("selected", on); });
-      document.getElementById("fullscreenToggle").addEventListener("click", event => { const button = event.currentTarget; const on = button.getAttribute("aria-pressed") !== "true"; button.setAttribute("aria-pressed", String(on)); button.classList.toggle("selected", on); showToast(`Full screen preference ${on ? "enabled" : "disabled"}.`); });
+
+      bindEvents();
+      renderHomeTabs();
+      renderExplore();
       loadNews();
-      renderProfiles();
-    })();
-  </script>
-</body>
+    </script>
+  </body>
 </html>
